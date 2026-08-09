@@ -83,6 +83,7 @@ async function fetchAllUsers() {
 }
 
 // Fetch detailed profile when a menu item is clicked
+// Fetch detailed profile when a menu item is clicked
 async function loadAdvancedProfile(basicUser) {
     const profileCard = document.getElementById('profileCard');
     const profileContent = document.getElementById('profileContent');
@@ -104,6 +105,19 @@ async function loadAdvancedProfile(basicUser) {
         // --- POPULATE UI ---
         document.getElementById('advName').textContent = `${basicUser.display_name || basicUser.username} (#${basicUser.id})`;
         document.getElementById('advHandle').textContent = `@${basicUser.username}`;
+
+        // --- ROLE BADGE LOGIC ---
+        const statusBadge = document.getElementById('advStatus');
+        const userRole = advData.role || basicUser.role || "Member"; // Fallback to "Member" if role is missing
+        
+        statusBadge.textContent = userRole;
+
+        // Style the badge based on whether they are banned or have a special role
+        if (typeof userRole === "string" && userRole.toLowerCase().includes("banned")) {
+            statusBadge.className = 'status-badge banned';
+        } else {
+            statusBadge.className = 'status-badge';
+        }
 
         // Formatted Join Date
         let joinText = "Unknown";
