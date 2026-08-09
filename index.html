@@ -1,39 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Pages Site</title>
-    <style>
-        /* Basic styling to make it look nice */
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-            transition: background-color 0.3s ease;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: 2px solid #333;
-            border-radius: 5px;
-            background-color: white;
-        }
-        button:hover {
-            background-color: #f0f0f0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Directory</title>
+  <style>
+    :root {
+      --bg-color: #f4f4f9;
+      --panel-bg: #ffffff;
+      --border-color: #e0e0e0;
+      --text-main: #333;
+      --text-muted: #666;
+      --hover-bg: #f0f0f5;
+      --banned-bg: #e8e8e8;
+      --banned-text: #808080;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      display: flex;
+      height: 100vh;
+      color: var(--text-main);
+    }
+
+    /* Left Sidebar: Quick Menu */
+    .sidebar {
+      width: 300px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 15px;
+      background: var(--text-main);
+      color: white;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
+
+    .user-item {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .user-item:hover {
+      background: var(--hover-bg);
+    }
+
+    .user-item.banned {
+      background: var(--banned-bg);
+      color: var(--banned-text);
+    }
+
+    .user-name {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .user-handle {
+      font-size: 0.85em;
+      color: var(--text-muted);
+    }
+
+    /* Right Side: Advanced View */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .profile-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      display: none; /* Hidden until a user is clicked */
+    }
+
+    .profile-card h2 {
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      background: #e0fae0;
+      color: #2e7d32;
+    }
+
+    .status-badge.banned {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+    }
+
+    .stat-box {
+      background: var(--bg-color);
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      font-size: 0.8em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .details-list p {
+      margin: 10px 0;
+      font-size: 0.95em;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>This is my first website hosted on GitHub Pages.</p>
-    
-    <!-- The button and paragraph our JavaScript will interact with -->
-    <button id="actionButton">Click Me</button>
-    <h2 id="messageArea"></h2>
 
-    <!-- This links your JavaScript file to the HTML -->
-    <script src="app.js"></script>
+  <!-- LEFT: Quick Menu -->
+  <div class="sidebar">
+    <div class="sidebar-header">User Directory</div>
+    <div id="userList">
+      <div class="loading">Loading users...</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Advanced View -->
+  <div class="main-content">
+    <div class="profile-card" id="profileCard">
+      <div id="profileLoading" class="loading" style="display: none;">Fetching advanced data...</div>
+      
+      <div id="profileContent">
+        <h2 id="advName">User Name</h2>
+        <div id="advHandle" class="user-handle" style="margin-bottom: 10px;">@username</div>
+        <div id="advStatus" class="status-badge">Active</div>
+
+        <div class="details-list">
+          <p><strong>Member Since:</strong> <span id="advJoin">...</span></p>
+          <p><strong>Last Active:</strong> <span id="advActive">...</span></p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-value" id="advFriends">0</div>
+            <div class="stat-label">Friends</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="advPlaces">0</div>
+            <div class="stat-label">Places</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="advItems">0</div>
+            <div class="stat-label">Items</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
