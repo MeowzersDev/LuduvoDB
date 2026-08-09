@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetchAllUsers();
 });
-
+//uh idk
 async function fetchAllUsers() {
     const listContainer = document.getElementById('userList');
     listContainer.innerHTML = '<div class="loading" id="loadingText">Loading users...</div>';
