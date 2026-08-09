@@ -93,7 +93,11 @@ async function LoadUserProfile(basicUser) {
     profileLoading.style.display = 'block';
 
     try {
-        const response = await fetch(`https://corsproxy.io/?https://api.luduvo.com/users/${basicUser.id}/profile`);
+        // Adds a unique timestamp so the proxy and browser are forced to fetch fresh data every single time
+        const cacheBuster = new Date().getTime();
+        const response = await fetch(`https://corsproxy.io/?https://api.luduvo.com/users/${basicUser.id}/profile?_=${cacheBuster}`, {
+            cache: "no-store"
+        });
         let userData = {};
         
         if (response.ok) {
