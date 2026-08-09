@@ -1,48 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Fetch the batch user list to build the menu
-    fetchUsers();
+    fetchAllUsers();
 });
 
-async function fetchUsers() {
+async function fetchAllUsers() {
     const listContainer = document.getElementById('userList');
+    listContainer.innerHTML = '<div class="loading" id="loadingText">Loading users...</div>';
+    const loadingText = document.getElementById('loadingText');
     
+    let allUsers = [];
+    let current_offset = 0;
+    let keepFetching = true;
+
     try {
-        // Replicating Script 1 logic: Fetch the list of users
-        const response = await fetch('https://api.luduvo.com/users?limit=100&offset=0');
-        
-        if (!response.ok) throw new Error('Failed to fetch users');
-        
-        const data = await response.json();
-        const users = data.users || [];
-        
-        listContainer.innerHTML = ''; // Clear loading text
-        
-        if (users.length === 0) {
+        // --- PAGINATION LOOP ---
+        while (keepFetching) {
+            loadingText.textContent = `Fetching users... (${allUsers.length} loaded)`;
+            
+            const response = await fetch(`https://api.luduvo.com/users?limit=100&offset=${current_offset}`);
+            
+            if (!response.ok) {
+                console.error("API failed with status:", response.status);
+                keepFetching = false;
+                break;
+            }
+            
+            const data = await response.json();
+            const users = data.users || [];
+            
+            if (users.length === 0) {
+                keepFetching = false;
+                break;
+            }
+
+            for (let i = 0; i < users.length; i++) {
+                const user = users[i];
+                allUsers.push(user);
+                
+                // Stop condition based on ID
+                if (Number(user.id) <= 1) {
+                    keepFetching = false;
+                }
+            }
+            
+            current_offset += 100;
+            
+            // Short pause to prevent API rate limiting
+            await new Promise(resolve => setTimeout(resolve, 200)); 
+        }
+
+        // Clear the loading text once done
+        listContainer.innerHTML = ''; 
+
+        if (allUsers.length === 0) {
             listContainer.innerHTML = '<div class="loading">No users found.</div>';
             return;
         }
 
-        // Build the menu UI
-        users.forEach(user => {
+        // --- RENDER MENU ---
+        allUsers.forEach(user => {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'user-item';
-            
-            // Check for banned role to apply gray tint
-            const isBanned = typeof user.role === 'string' && user.role.toLowerCase().includes('banned');
-            if (isBanned) {
-                itemDiv.classList.add('banned');
-            }
 
-            // Populate text
             const displayName = user.display_name || user.username || "Unknown User";
+            
             itemDiv.innerHTML = `
-                <div class="user-name">${displayName}</div>
-                <div class="user-handle">@${user.username || "unknown"} (ID: ${user.id})</div>
+                <div class="user-name">${displayName} (#${user.id})</div>
+                <div class="user-handle">@${user.username || "unknown"}</div>
             `;
 
-            // Add click event to open advanced view
+            // Click listener for the advanced view
             itemDiv.addEventListener('click', () => {
-                loadAdvancedProfile(user, isBanned);
+                loadAdvancedProfile(user);
             });
 
             listContainer.appendChild(itemDiv);
@@ -50,12 +78,12 @@ async function fetchUsers() {
 
     } catch (error) {
         console.error(error);
-        listContainer.innerHTML = '<div class="loading">Error loading users.</div>';
+        listContainer.innerHTML = '<div class="loading">Error loading users. Check console.</div>';
     }
 }
 
-// 2. Fetch detailed profile when a menu item is clicked
-async function loadAdvancedProfile(basicUser, isBanned) {
+// Fetch detailed profile when a menu item is clicked
+async function loadAdvancedProfile(basicUser) {
     const profileCard = document.getElementById('profileCard');
     const profileContent = document.getElementById('profileContent');
     const profileLoading = document.getElementById('profileLoading');
@@ -66,7 +94,6 @@ async function loadAdvancedProfile(basicUser, isBanned) {
     profileLoading.style.display = 'block';
 
     try {
-        // Replicating Script 2 logic: Fetch advanced profile stats
         const response = await fetch(`https://api.luduvo.com/users/${basicUser.id}/profile`);
         let advData = {};
         
@@ -75,20 +102,8 @@ async function loadAdvancedProfile(basicUser, isBanned) {
         }
 
         // --- POPULATE UI ---
-
-        // Basic Info
-        document.getElementById('advName').textContent = basicUser.display_name || basicUser.username;
+        document.getElementById('advName').textContent = `${basicUser.display_name || basicUser.username} (#${basicUser.id})`;
         document.getElementById('advHandle').textContent = `@${basicUser.username}`;
-
-        // Status Badge
-        const statusBadge = document.getElementById('advStatus');
-        if (isBanned) {
-            statusBadge.textContent = 'BANNED';
-            statusBadge.className = 'status-badge banned';
-        } else {
-            statusBadge.textContent = 'ACTIVE';
-            statusBadge.className = 'status-badge';
-        }
 
         // Formatted Join Date
         let joinText = "Unknown";
@@ -99,7 +114,7 @@ async function loadAdvancedProfile(basicUser, isBanned) {
         }
         document.getElementById('advJoin').textContent = joinText;
 
-        // Last Active Logic (Replicating your exact script math)
+        // Last Active Logic 
         let activeText = "Unknown";
         if (advData.last_active) {
             const daysSince = Math.floor(
