@@ -70,7 +70,7 @@ async function fetchAllUsers() {
 
             // Click listener for the advanced view
             itemDiv.addEventListener('click', () => {
-                loadAdvancedProfile(user);
+                LoadUserProfile(user);
             });
 
             listContainer.appendChild(itemDiv);
