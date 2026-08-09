@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetchAllUsers();
 });
-//uh idk
+
 async function fetchAllUsers() {
     const listContainer = document.getElementById('userList');
     listContainer.innerHTML = '<div class="loading" id="loadingText">Loading users...</div>';
@@ -35,8 +35,8 @@ async function fetchAllUsers() {
             for (let i = 0; i < users.length; i++) {
                 const user = users[i];
                 allUsers.push(user);
-                
-                // Stop condition based on ID
+
+                // stop
                 if (Number(user.id) <= 1) {
                     keepFetching = false;
                 }
@@ -48,7 +48,6 @@ async function fetchAllUsers() {
             await new Promise(resolve => setTimeout(resolve, 200)); 
         }
 
-        // Clear the loading text once done
         listContainer.innerHTML = ''; 
 
         if (allUsers.length === 0) {
@@ -111,7 +110,7 @@ async function LoadUserProfile(basicUser) {
         
         statusBadge.textContent = userRole;
 
-        // Style the badge based on whether they are banned or have a special role
+        // Style the badge based on role
         if (typeof userRole === "string" && userRole.toLowerCase().includes("admin")) {
             statusBadge.className = 'status-badge admin';
         } else {
@@ -145,7 +144,7 @@ async function LoadUserProfile(basicUser) {
             } else if (diffDays < 30) {
                 activeText = `${diffDays} days ago`;
             } else {
-                activeText = "Recently Online"; // Or keep your preferred fallback for older dates
+                activeText = "Recently Online";
             }
         }
         document.getElementById('userActive').textContent = activeText;
