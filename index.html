@@ -12,8 +12,6 @@
       --text-main: #333;
       --text-muted: #666;
       --hover-bg: #f0f0f5;
-      --banned-bg: #e8e8e8;
-      --banned-text: #808080;
     }
 
     body {
@@ -54,11 +52,6 @@
 
     .user-item:hover {
       background: var(--hover-bg);
-    }
-
-    .user-item.banned {
-      background: var(--banned-bg);
-      color: var(--banned-text);
     }
 
     .user-name {
@@ -105,11 +98,6 @@
       margin-bottom: 20px;
       background: #e0fae0;
       color: #2e7d32;
-    }
-
-    .status-badge.banned {
-      background: #ffebee;
-      color: #c62828;
     }
 
     .stats-grid {
@@ -167,7 +155,9 @@
       <div id="profileContent">
         <h2 id="advName">User Name</h2>
         <div id="advHandle" class="user-handle" style="margin-bottom: 10px;">@username</div>
-        <div id="advStatus" class="status-badge">Active</div>
+        
+        <!-- Simplified status badge -->
+        <div id="advStatus" class="status-badge">Registered</div>
 
         <div class="details-list">
           <p><strong>Member Since:</strong> <span id="advJoin">...</span></p>
