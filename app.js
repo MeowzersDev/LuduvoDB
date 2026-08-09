@@ -113,7 +113,7 @@ async function LoadUserProfile(basicUser) {
 
         // Style the badge based on whether they are banned or have a special role
         if (typeof userRole === "string" && userRole.toLowerCase().includes("admin")) {
-            statusBadge.className = 'status-badge banned';
+            statusBadge.className = 'status-badge admin';
         } else {
             statusBadge.className = 'status-badge';
         }
