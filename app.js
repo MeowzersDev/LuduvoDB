@@ -120,6 +120,7 @@ async function LoadUserProfile(basicUser) {
 
         // Formatted Join Date
         let joinText = "Unknown";
+        console.log("Raw last_active from API:", userData.last_active);
         if (userData.member_since || basicUser.created_at) {
             const timestamp = userData.member_since || basicUser.created_at;
             const joinDate = new Date(timestamp * 1000);
@@ -128,6 +129,7 @@ async function LoadUserProfile(basicUser) {
         document.getElementById('userJoin').textContent = joinText;
 
         let activeText = "Unknown";
+        console.log("Raw last_active from API:", userData.last_active);
         if (userData.last_active) {
             const diffMs = Date.now() - new Date(userData.last_active * 1000);
             const diffMins = Math.floor(diffMs / (1000 * 60));
