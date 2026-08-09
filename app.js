@@ -83,8 +83,7 @@ async function fetchAllUsers() {
 }
 
 // Fetch detailed profile when a menu item is clicked
-// Fetch detailed profile when a menu item is clicked
-async function loadAdvancedProfile(basicUser) {
+async function LoadUserProfile(basicUser) {
     const profileCard = document.getElementById('profileCard');
     const profileContent = document.getElementById('profileContent');
     const profileLoading = document.getElementById('profileLoading');
@@ -96,10 +95,10 @@ async function loadAdvancedProfile(basicUser) {
 
     try {
         const response = await fetch(`https://corsproxy.io/?https://api.luduvo.com/users/${basicUser.id}/profile`);
-        let advData = {};
+        let userData = {};
         
         if (response.ok) {
-            advData = await response.json();
+            userData = await response.json();
         }
 
         // --- POPULATE UI ---
@@ -108,7 +107,7 @@ async function loadAdvancedProfile(basicUser) {
 
         // --- ROLE BADGE LOGIC ---
         const statusBadge = document.getElementById('advStatus');
-        const userRole = advData.role || basicUser.role || "Member"; // Fallback to "Member" if role is missing
+        const userRole = userData.role || basicUser.role || "Member"; // Fallback to "Member" if role is missing
         
         statusBadge.textContent = userRole;
 
@@ -121,34 +120,38 @@ async function loadAdvancedProfile(basicUser) {
 
         // Formatted Join Date
         let joinText = "Unknown";
-        if (advData.member_since || basicUser.created_at) {
-            const timestamp = advData.member_since || basicUser.created_at;
+        if (userData.member_since || basicUser.created_at) {
+            const timestamp = userData.member_since || basicUser.created_at;
             const joinDate = new Date(timestamp * 1000);
             joinText = joinDate.toLocaleDateString() + ' ' + joinDate.toLocaleTimeString();
         }
         document.getElementById('advJoin').textContent = joinText;
 
-        // Last Active Logic 
         let activeText = "Unknown";
-        if (advData.last_active) {
-            const daysSince = Math.floor(
-                (Date.now() - new Date(advData.last_active * 1000)) / (1000 * 60 * 60 * 24)
-            );
-            
-            if (daysSince <= 0) {
-                activeText = "Recently Online";
-            } else if (daysSince === 1) {
+        if (userData.last_active) {
+            const diffMs = Date.now() - new Date(userData.last_active * 1000);
+            const diffMins = Math.floor(diffMs / (1000 * 60));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+            if (diffMins < 60) {
+                activeText = diffMins <= 1 ? "1 minute ago" : `${diffMins} minutes ago`;
+            } else if (diffHours < 24) {
+                activeText = diffHours === 1 ? "1 hour ago" : `${diffHours} hours ago`;
+            } else if (diffDays === 1) {
                 activeText = "1 day ago";
+            } else if (diffDays < 30) {
+                activeText = `${diffDays} days ago`;
             } else {
-                activeText = `${daysSince} days ago`;
+                activeText = "Recently Online"; // Or keep your preferred fallback for older dates
             }
         }
-        document.getElementById('advActive').textContent = activeText;
+        document.getElementById('userActive').textContent = activeText;
 
         // Counts
-        document.getElementById('advFriends').textContent = advData.friend_count ?? 0;
-        document.getElementById('advPlaces').textContent = advData.place_count ?? 0;
-        document.getElementById('advItems').textContent = advData.item_count ?? 0;
+        document.getElementById('userFriends').textContent = userData.friend_count ?? 0;
+        document.getElementById('userPlaces').textContent = userData.place_count ?? 0;
+        document.getElementById('userItems').textContent = userData.item_count ?? 0;
 
         // Hide loading, show content
         profileLoading.style.display = 'none';
