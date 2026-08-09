@@ -16,7 +16,7 @@ async function fetchAllUsers() {
         while (keepFetching) {
             loadingText.textContent = `Fetching users... (${allUsers.length} loaded)`;
             
-            const response = await fetch(`https://api.luduvo.com/users?limit=100&offset=${current_offset}`);
+            const response = await fetch(`https://corsproxy.io/?https://api.luduvo.com/users?limit=100&offset=${current_offset}`);
             
             if (!response.ok) {
                 console.error("API failed with status:", response.status);
@@ -94,7 +94,7 @@ async function loadAdvancedProfile(basicUser) {
     profileLoading.style.display = 'block';
 
     try {
-        const response = await fetch(`https://api.luduvo.com/users/${basicUser.id}/profile`);
+        const response = await fetch(`https://corsproxy.io/?https://api.luduvo.com/users/${basicUser.id}/profile`);
         let advData = {};
         
         if (response.ok) {
