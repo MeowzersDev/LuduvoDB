@@ -88,7 +88,7 @@
       width: 100%;
       max-width: 500px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      display: none; /* Hidden until a user is clicked */
+      display: none; 
     }
 
     .profile-card h2 {
@@ -114,7 +114,7 @@
 
     .stats-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 15px;
       margin-top: 20px;
       border-top: 1px solid var(--border-color);
@@ -153,15 +153,13 @@
 </head>
 <body>
 
-  <!-- LEFT: Quick Menu -->
   <div class="sidebar">
     <div class="sidebar-header">User Directory</div>
     <div id="userList">
-      <div class="loading">Loading users...</div>
+      <div class="loading" id="loadingText">Initializing...</div>
     </div>
   </div>
 
-  <!-- RIGHT: Advanced View -->
   <div class="main-content">
     <div class="profile-card" id="profileCard">
       <div id="profileLoading" class="loading" style="display: none;">Fetching advanced data...</div>
