@@ -102,17 +102,17 @@ async function LoadUserProfile(basicUser) {
         }
 
         // --- POPULATE UI ---
-        document.getElementById('advName').textContent = `${basicUser.display_name || basicUser.username} (#${basicUser.id})`;
-        document.getElementById('advHandle').textContent = `@${basicUser.username}`;
+        document.getElementById('userName').textContent = `${basicUser.display_name || basicUser.username} (#${basicUser.id})`;
+        document.getElementById('userHandle').textContent = `@${basicUser.username}`;
 
         // --- ROLE BADGE LOGIC ---
-        const statusBadge = document.getElementById('advStatus');
-        const userRole = userData.role || basicUser.role || "Member"; // Fallback to "Member" if role is missing
+        const statusBadge = document.getElementById('userStatus');
+        const userRole = userData.role || basicUser.role || "Unknown"; 
         
         statusBadge.textContent = userRole;
 
         // Style the badge based on whether they are banned or have a special role
-        if (typeof userRole === "string" && userRole.toLowerCase().includes("banned")) {
+        if (typeof userRole === "string" && userRole.toLowerCase().includes("admin")) {
             statusBadge.className = 'status-badge banned';
         } else {
             statusBadge.className = 'status-badge';
@@ -125,7 +125,7 @@ async function LoadUserProfile(basicUser) {
             const joinDate = new Date(timestamp * 1000);
             joinText = joinDate.toLocaleDateString() + ' ' + joinDate.toLocaleTimeString();
         }
-        document.getElementById('advJoin').textContent = joinText;
+        document.getElementById('userJoin').textContent = joinText;
 
         let activeText = "Unknown";
         if (userData.last_active) {
