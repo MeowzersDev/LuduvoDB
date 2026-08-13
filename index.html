@@ -3,179 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - Site Directory</title>
+  <title>Luduvo Database</title>
   <style>
-    :root {
-      --bg-color: #f4f4f9;
-      --panel-bg: #ffffff;
-      --border-color: #e0e0e0;
-      --text-main: #333;
-      --text-muted: #666;
-      --hover-bg: #f0f0f5;
-      --accent-color: #2563eb;
-    }
-
     body {
+      background-color: #222222;
+      margin: 0;
+      padding: 20px; 
+      height: 100vh;
+      box-sizing: border-box;
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg-color);
-      display: flex;
-      min-height: 100vh;
-      color: var(--text-main);
-    }
-
-    /* Left Sidebar */
-    .sidebar {
-      width: 300px;
-      background: var(--panel-bg);
-      border-right: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .sidebar-header {
-      padding: 15px;
-      background: var(--text-main);
-      color: white;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-    }
-
-    /* Interactive Page List */
-    .page-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .page-item a {
-      display: block;
-      padding: 15px;
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-main);
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .page-item a:hover {
-      background: var(--hover-bg);
-      color: var(--accent-color);
-    }
-
-    .page-title {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-
-    .page-path {
-      font-size: 0.85em;
-      color: var(--text-muted);
-    }
-
-    /* Main Content Dashboard View */
-    .main-content {
-      flex: 1;
-      padding: 40px;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
     }
 
-    .welcome-card {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 30px;
+    .container {
+      background-color: #d8d8d8; 
       width: 100%;
-      max-width: 500px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .welcome-card h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.8em;
-      font-weight: bold;
-      margin-bottom: 20px;
-      background: #e0fae0;
-      color: #2e7d32;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-top: 20px;
-      border-top: 1px solid var(--border-color);
-      padding-top: 20px;
-    }
-
-    .stat-box {
-      background: var(--bg-color);
-      padding: 15px;
-      border-radius: 6px;
+      max-width: 600px;
+      height: 100%;
+      padding: 20px;
+      box-sizing: border-box;
       text-align: center;
     }
 
-    .stat-value {
-      font-size: 1.5em;
-      font-weight: bold;
+    h1 {
+      margin: 10px 0 5px 0;
+      font-size: 28px;
+      color: #000;
     }
 
-    .stat-label {
-      font-size: 0.8em;
-      color: var(--text-muted);
-      text-transform: uppercase;
+    h2 {
+      margin: 0 0 30px 0;
+      font-size: 18px;
+      font-weight: normal;
+      color: #222;
+    }
+
+    .directory-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .directory-link {
+      font-size: 18px;
+      color: #000;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid #999;
+      background-color: #eee;
+      width: 200px;
+      transition: background-color 0.2s;
+    }
+
+    .directory-link:hover {
+      background-color: #ccc;
     }
   </style>
 </head>
 <body>
 
-  <!-- Left Sidebar: Pages Menu -->
-  <div class="sidebar">
-    <div class="sidebar-header">Site Navigation</div>
-    <ul class="page-list" id="pageList">
-      <li class="page-item">
-        <a href="./users/">
-          <div class="page-title">User Directory</div>
-          <div class="page-path">/users</div>
-        </a>
-      </li>
-      <!-- You can easily add future subpages here! -->
-    </ul>
-  </div>
+  <div class="container">
+    <h1>Welcome to the Luduvo Database</h1>
+    <h2>Pages Directory:</h2>
+    
+    <div class="directory-list">
+      <a href="./users/" class="directory-link">/users</a>
 
-  <!-- Right Main Content Area -->
-  <div class="main-content">
-    <div class="welcome-card">
-      <h2>Welcome Home</h2>
-      <div class="status-badge">System Online</div>
-
-      <p>Select a page from the sidebar navigation to jump directly to that section of the website.</p>
-
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-value" id="totalPages">1</div>
-          <div class="stat-label">Active Pages</div>
-        </div>
-        
-        <div class="stat-box">
-          <div class="stat-value">v1.0</div>
-          <div class="stat-label">Version</div>
-        </div>
-      </div>
     </div>
   </div>
-
-  <!-- Main script file kept intact -->
-  <script src="home.js"></script>
 </body>
 </html>
