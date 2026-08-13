@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Directory</title>
+  <style>:root {
+      --bg-color: #f4f4f9;
+      --panel-bg: #ffffff;
+      --border-color: #e0e0e0;
+      --text-main: #333;
+      --text-muted: #666;
+      --hover-bg: #f0f0f5;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      display: flex;
+      height: 100vh;
+      color: var(--text-main);
+    }
+
+    /* Left Sidebar: User List */
+    .sidebar {
+      width: 300px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 15px;
+      background: var(--text-main);
+      color: white;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
+
+
+    
+    .user-item {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .user-item:hover {
+      background: var(--hover-bg);
+    }
+
+    .user-name {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .user-handle {
+      font-size: 0.85em;
+      color: var(--text-muted);
+    }
+
+
+    
+    /* Right Side: User Card View */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .profile-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      display: none; 
+    }
+
+    .profile-card h2 {
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      background: #e0fae0;
+      color: #2e7d32;
+    }
+    .status-badge.admin {
+      background: #ffe3e3;
+      color: #e53e3e;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+    }
+
+    .stat-box {
+      background: var(--bg-color);
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      font-size: 0.8em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .details-list p {
+      margin: 10px 0;
+      font-size: 0.95em;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="sidebar-header">User Directory</div>
+    <div id="userList">
+      <div class="loading" id="loadingText">Initializing...</div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="profile-card" id="profileCard">
+      <div id="profileLoading" class="loading" style="display: none;">Fetching user data...</div>
+      
+      <div id="profileContent">
+        <h2 id="userName">User Name</h2>
+        <div id="userHandle" class="user-handle" style="margin-bottom: 10px;">@username</div>
+        
+        <div id="userStatus" class="status-badge">...</div>
+
+        <div class="details-list">
+          <p><strong>Member Since:</strong> <span id="userJoin">...</span></p>
+          <p><strong>Last Active:</strong> <span id="userActive">...</span></p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-value" id="userFriends">0</div>
+            <div class="stat-label">Friends</div>
+          </div>
+          
+          <div class="stat-box">
+            <div class="stat-value" id="userPlaces">0</div>
+            <div class="stat-label">Places</div>
+          </div>
+          
+          <div class="stat-box">
+            <div class="stat-value" id="userItems">0</div>
+            <div class="stat-label">Items</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- so super duper important -->
+  <script src="app.js"></script>
+</body>
+</html>
